@@ -6,12 +6,37 @@ try:
 except sqlite3.Error as e:
     print(e)
     exit(1)
-def gerarSenha():
+def gerarSenha(senha=None):
+    # print(senha)
+    # exit()
     cur = con.cursor()
+    cur2 = con.cursor()
+    if senha is None:
+        try:
+            cur2.execute('SELECT senha FROM senha order by idSenha desc;')
+            senha = cur2.fetchone()
+            row = None
+            try:
+                cur.execute('INSERT INTO senha (senha) VALUES (?)', '55')
+                row = cur.fetchone()
+                print(row)
+                exit(1)
+                print('senha gerada ', row)
+                if row == None:
+                    raise sqlite3.Error('erro gerando senha')
+            except sqlite3.Error as e:
+                print(e)
+                exit(1)
+            cur.close()
+            con.commit()
+        except sqlite3.Error as e:
+            print(e)
+            exit(1)
     row = None
     try:
-        cur.execute('INSERT INTO senha default values')
-        row = cur.lastrowid
+        # cur.execute('INSERT INTO senha default values')
+        cur.execute('INSERT INTO senha (senha) VALUES (?)',senha) #erro aqui
+        row = cur.fetchone()
         print('senha gerada ' ,row)
         if row == None:
                 raise sqlite3.Error('erro gerando senha')
@@ -41,9 +66,6 @@ def chamarSenha(guichecall):
     if senha is not None:
         print('senha '+ str(senha[0]) + ' ' 'chamada guiche ', guiche)
 def ultimosChamados():
-    from datetime import datetime
-    import pytz
-    localdata = pytz.timezone('America/Santarem')
     cur = con.cursor()
     query = None
     try:

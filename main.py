@@ -1,4 +1,4 @@
 import db
 db.gerarSenha()
-db.chamarSenha(1)
-db.ultimosChamados()
+# db. chamarSenha(5)
+# db.ultimosChamados()
